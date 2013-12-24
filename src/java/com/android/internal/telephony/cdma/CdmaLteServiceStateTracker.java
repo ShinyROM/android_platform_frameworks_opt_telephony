@@ -528,8 +528,15 @@ public class CdmaLteServiceStateTracker extends CdmaServiceStateTracker {
 
     @Override
     public boolean isConcurrentVoiceAndDataAllowed() {
-        // Using the Conncurrent Service Supported flag for CdmaLte devices.
-        return mSS.getCssIndicator() == 1;
+        // If the device uses LTE RIL then indicate true as we're in the LTE service state
+        // where it is supported. *TODO: in the future, also return true for devices that have 
+        // SVDO support as indicated by a system property.* If neither of these are true, do the
+        // traditional check for concurrent voice and data capability.
+        if (mSS.getRilDataRadioTechnology() == ServiceState.RIL_RADIO_TECHNOLOGY_LTE) {
+            return true;
+        } else {
+            return mSS.getCssIndicator() == 1;
+        }
     }
 
     /**
