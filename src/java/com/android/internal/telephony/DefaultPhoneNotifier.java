@@ -137,7 +137,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
                     apnType,
                     linkProperties,
                     linkCapabilities,
-                    ((telephony!=null) ? telephony.getNetworkType() :
+                    ((telephony!=null) ? telephony.getDataNetworkType() :
                     TelephonyManager.NETWORK_TYPE_UNKNOWN),
                     roaming);
         } catch (RemoteException ex) {

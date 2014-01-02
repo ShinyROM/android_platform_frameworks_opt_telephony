@@ -23,6 +23,7 @@ import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.telephony.Rlog;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.PhoneConstants;
@@ -224,18 +225,23 @@ class DcController extends StateMachine {
                     if (DBG) log("onDataStateChanged: Found ConnId=" + newState.cid
                             + " newState=" + newState.toString());
                     if (newState.active == DATA_CONNECTION_ACTIVE_PH_LINK_INACTIVE) {
-                        DcFailCause failCause = DcFailCause.fromInt(newState.status);
-                        if (DBG) log("onDataStateChanged: inactive failCause=" + failCause);
-                        if (failCause.isRestartRadioFail()) {
-                            if (DBG) log("onDataStateChanged: X restart radio");
-                            mDct.sendRestartRadio();
-                        } else if (failCause.isPermanentFail()) {
-                            if (DBG) log("onDataStateChanged: inactive, add to cleanup list");
-                            apnsToCleanup.addAll(dc.mApnContexts);
-                        } else {
-                            if (DBG) log("onDataStateChanged: inactive, add to retry list");
-                            dcsToRetry.add(dc);
-                        }
+			if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+				if (DBG) log("onDataStateChanged: inactive, add to retry list");
+				dcsToRetry.add(dc);
+			} else {
+		                DcFailCause failCause = DcFailCause.fromInt(newState.status);
+		                if (DBG) log("onDataStateChanged: inactive failCause=" + failCause);
+		                if (failCause.isRestartRadioFail()) {
+		                    if (DBG) log("onDataStateChanged: X restart radio");
+		                    mDct.sendRestartRadio();
+		                } else if (failCause.isPermanentFail()) {
+		                    if (DBG) log("onDataStateChanged: inactive, add to cleanup list");
+		                    apnsToCleanup.addAll(dc.mApnContexts);
+		                } else {
+		                    if (DBG) log("onDataStateChanged: inactive, add to retry list");
+		                    dcsToRetry.add(dc);
+		                }
+			}
                     } else {
                         // Its active so update the DataConnections link properties
                         UpdateLinkPropertyResult result = dc.updateLinkProperty(newState);
