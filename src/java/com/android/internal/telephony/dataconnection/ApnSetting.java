@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.dataconnection;
 
+import android.os.SystemProperties;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.RILConstants;
 
@@ -187,6 +188,8 @@ public class ApnSetting {
                     t.equalsIgnoreCase(PhoneConstants.APN_TYPE_ALL) ||
                     (t.equalsIgnoreCase(PhoneConstants.APN_TYPE_DEFAULT) &&
                     type.equalsIgnoreCase(PhoneConstants.APN_TYPE_HIPRI))) {
+                return true;
+            } else if (type.equalsIgnoreCase("ims") && SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
                 return true;
             }
         }
