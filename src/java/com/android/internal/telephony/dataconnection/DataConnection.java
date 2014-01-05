@@ -749,12 +749,7 @@ public final class DataConnection extends StateMachine {
         configureRetry(mApnSetting.canHandleType(PhoneConstants.APN_TYPE_DEFAULT));
         mRetryManager.setRetryCount(0);
         mRetryManager.setCurMaxRetryCount(mConnectionParams.mInitialMaxRetry);
-        if(SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1)
-        {
-            mRetryManager.setRetryForever(true);
-        } else {
-            mRetryManager.setRetryForever(false);
-        }
+        mRetryManager.setRetryForever(false);
 
         if (DBG) {
             log("initConnection: "
