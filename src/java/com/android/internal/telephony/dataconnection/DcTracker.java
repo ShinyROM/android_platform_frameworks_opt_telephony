@@ -1709,7 +1709,7 @@ public final class DcTracker extends DcTrackerBase {
                 // Log this failure to the Event Logs.
                 int cid = getCellLocationId();
                 EventLog.writeEvent(EventLogTags.PDP_SETUP_FAIL,
-                        cause.ordinal(), cid, TelephonyManager.getDefault().getDataNetworkType());
+                        cause.ordinal(), cid, TelephonyManager.getDefault().getNetworkType());
             }
 
             // Count permanent failures and remove the APN we just tried
@@ -1765,31 +1765,19 @@ public final class DcTracker extends DcTrackerBase {
             mPhone.notifyDataConnection(Phone.REASON_APN_FAILED, apnContext.getApnType());
 
             apnContext.setDataConnectionAc(null);
-	    int delay = getApnDelay();
-	    if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
-		if (apnContext.getWaitingApnsPermFailCount() == 0) {
-			if (DBG) {
-		            log("onDataSetupCompleteError: All APN's had permanent failures, delay=" + delay);
-		        }
-		} else {
-			if (DBG) {
-				log("onDataSetupCompleteError: Not all APN's had permanent failures, delay=" + delay);
-			}
-		}
-		startAlarmForRestartTrySetup(delay, apnContext);
-	    } else {
-		    if (apnContext.getWaitingApnsPermFailCount() == 0) {
-		        if (DBG) {
-		            log("onDataSetupCompleteError: All APN's had permanent failures, stop retrying");
-		        }
-		    } else {
-		        if (DBG) {
-		            log("onDataSetupCompleteError: Not all APN's had permanent failures delay="
-		                    + delay);
-		        }
-		        startAlarmForRestartTrySetup(delay, apnContext);
-		    }
-	    }
+
+            if (apnContext.getWaitingApnsPermFailCount() == 0) {
+                if (DBG) {
+                    log("onDataSetupCompleteError: All APN's had permanent failures, stop retrying");
+                }
+            } else {
+                int delay = getApnDelay();
+                if (DBG) {
+                    log("onDataSetupCompleteError: Not all APN's had permanent failures delay="
+                            + delay);
+                }
+                startAlarmForRestartTrySetup(delay, apnContext);
+            }
         } else {
             if (DBG) log("onDataSetupCompleteError: Try next APN");
             apnContext.setState(DctConstants.State.SCANNING);

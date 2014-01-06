@@ -1350,7 +1350,7 @@ public abstract class DcTrackerBase extends Handler {
     }
 
     protected String getReryConfig(boolean forDefault) {
-        int nt = mPhone.getServiceState().getDataNetworkType();
+        int nt = mPhone.getServiceState().getNetworkType();
 
         if ((nt == TelephonyManager.NETWORK_TYPE_CDMA) ||
             (nt == TelephonyManager.NETWORK_TYPE_1xRTT) ||
