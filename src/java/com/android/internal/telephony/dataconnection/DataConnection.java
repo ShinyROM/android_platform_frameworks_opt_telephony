@@ -930,7 +930,7 @@ public final class DataConnection extends StateMachine {
                         if (DBG) {
                             log("DcDefaultState: EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED, cleaning up connections for toro");
                         }
-                        boolean dCleaned = mDct.cleanUpAllConnections(true, "TORO RAT Changed");
+                        boolean dCleaned = mDct.cleanUpAllConnections("TORO RAT Changed");
                         if (DBG) {
                             log("DcDefaultState: Toro Connections Cleaned Up: " + dCleaned);
                         }
