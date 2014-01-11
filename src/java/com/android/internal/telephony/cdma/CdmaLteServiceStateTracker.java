@@ -449,9 +449,7 @@ public class CdmaLteServiceStateTracker extends CdmaServiceStateTracker {
         }
 
         if ((hasCdmaDataConnectionChanged || hasDataRadioTechnologyChanged)) {
-            if (SystemProperties.getInt("ro.telephony.toroRIL", 0) != 1) {
-                notifyDataRegStateRilRadioTechnologyChanged();
-            }
+            notifyDataRegStateRilRadioTechnologyChanged();
             mPhone.notifyDataConnection(null);
         }
 
