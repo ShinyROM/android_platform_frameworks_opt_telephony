@@ -926,6 +926,9 @@ public final class DataConnection extends StateMachine {
                                 + " drs=" + mDataRegState
                                 + " mRilRat=" + mRilRat);
                     }
+                    if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+                        transitionTo(mInactiveState);
+                    }
                     break;
 
                 default:
