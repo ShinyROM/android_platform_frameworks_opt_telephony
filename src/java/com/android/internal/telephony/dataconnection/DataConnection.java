@@ -927,6 +927,7 @@ public final class DataConnection extends StateMachine {
                                 + " mRilRat=" + mRilRat);
                     }
                     if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+                        mInactiveState.setEnterNotificationParams(DcFailCause.NONE);
                         transitionTo(mInactiveState);
                     }
                     break;
