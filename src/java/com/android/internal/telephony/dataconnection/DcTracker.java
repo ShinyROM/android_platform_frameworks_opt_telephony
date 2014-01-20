@@ -1186,7 +1186,7 @@ public final class DcTracker extends DcTrackerBase {
     private boolean isHigherPriorityApnContextActive(ApnContext apnContext) {
         for (ApnContext otherContext : mPrioritySortedApnContexts) {
             if (apnContext.getApnType().equalsIgnoreCase(otherContext.getApnType())) return false;
-            if (otherContext.isEnabled() && otherContext.getState() != DctConstants.State.FAILED) {
+            if (otherContext.isEnabled() && otherContext.getState() != DctConstants.State.FAILED && SystemProperties.getInt("ro.telephony.toroRIL", 0) != 1) {
                 return true;
             }
         }
@@ -2095,11 +2095,6 @@ public final class DcTracker extends DcTrackerBase {
                 if (apn.canHandleType(requestedApnType)) {
                     if (apn.bearer == 0 || apn.bearer == radioTech) {
                         if (DBG) log("buildWaitingApns: adding apn=" + apn.toString());
-                        apnList.add(apn);
-                    } else if (radioTech == 8 && apn.bearer == 14 && SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
-                        // radioTech (8 is CDMA) and APN bearer (14 is LTE) match those of a mismatched Verizon
-                        // network/APN pair, add APN anyways
-                        if (DBG) log("buildWaitingApns (special case for toro): adding apn=" + apn.toString());
                         apnList.add(apn);
                     } else {
                         if (DBG) {

@@ -22,7 +22,6 @@ import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.telephony.CellInfo;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -271,9 +270,6 @@ public abstract class ServiceStateTracker extends Handler {
     }
 
     protected void updatePhoneObject() {
-        if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
-            mSS.setRilVoiceRadioTechnology(ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A);
-        }
         mPhoneBase.updatePhoneObject(mSS.getRilVoiceRadioTechnology());
     }
 

@@ -927,10 +927,8 @@ public final class DataConnection extends StateMachine {
                                 + " mRilRat=" + mRilRat);
                     }
                     if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
-                        if (DBG) {
-                            log("DcDefaultState: EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED, cleaning up connections for toro");
-                        }
-                        mDct.cleanUpAllConnections("TORO RAT Changed");
+                        mInactiveState.setEnterNotificationParams(DcFailCause.NONE);
+                        transitionTo(mInactiveState);
                     }
                     break;
 
