@@ -1186,7 +1186,7 @@ public final class DcTracker extends DcTrackerBase {
     private boolean isHigherPriorityApnContextActive(ApnContext apnContext) {
         for (ApnContext otherContext : mPrioritySortedApnContexts) {
             if (apnContext.getApnType().equalsIgnoreCase(otherContext.getApnType())) return false;
-            if (otherContext.isEnabled() && otherContext.getState() != DctConstants.State.FAILED && SystemProperties.getInt("ro.telephony.toroRIL", 0) != 1) {
+            if (otherContext.isEnabled() && otherContext.getState() != DctConstants.State.FAILED) { // && SystemProperties.getInt("ro.telephony.toroRIL", 0) != 1) {
                 return true;
             }
         }

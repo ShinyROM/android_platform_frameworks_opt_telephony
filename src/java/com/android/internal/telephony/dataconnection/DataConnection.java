@@ -926,9 +926,6 @@ public final class DataConnection extends StateMachine {
                                 + " drs=" + mDataRegState
                                 + " mRilRat=" + mRilRat);
                     }
-                    if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
-                        mPhone.mCi.deactivateDataCall(mCid, 0,  null);
-                    }
                     break;
 
                 default:
