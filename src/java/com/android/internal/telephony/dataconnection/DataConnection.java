@@ -926,10 +926,7 @@ public final class DataConnection extends StateMachine {
                                 + " drs=" + mDataRegState
                                 + " mRilRat=" + mRilRat);
                     }
-                    if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
-                        mInactiveState.setEnterNotificationParams(DcFailCause.NONE);
-                        transitionTo(mInactiveState);
-                    }
+
                     break;
 
                 default:
@@ -1502,6 +1499,23 @@ public final class DataConnection extends StateMachine {
                         transitionTo(mRetryingState);
                     } else {
                         mInactiveState.setEnterNotificationParams(DcFailCause.LOST_CONNECTION);
+                        transitionTo(mInactiveState);
+                    }
+                    retVal = HANDLED;
+                    break;
+                }
+                case EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED: {
+                    AsyncResult ar = (AsyncResult)msg.obj;
+                    Pair<Integer, Integer> drsRatPair = (Pair<Integer, Integer>)ar.result;
+                    mDataRegState = drsRatPair.first;
+                    mRilRat = drsRatPair.second;
+                    if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+                        if (DBG) {
+                            log("DcActiveState: Forcing Inactive State - EVENT_DATA_CONNECTION_DRS_OR_RAT_CHANGED"
+                                    + " drs=" + mDataRegState
+                                    + " mRilRat=" + mRilRat);
+                        }
+                        mInactiveState.setEnterNotificationParams(DcFailCause.NONE);
                         transitionTo(mInactiveState);
                     }
                     retVal = HANDLED;
